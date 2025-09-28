@@ -1,0 +1,32 @@
+version: "3.9"
+name: "influx-grafana-docker"
+networks:
+  monitoring:
+    driver: bridge
+services:
+  influxdb:
+    container_name: influxdb
+    ports:
+      - "8086:8086"
+    image: "influxdb:2.7.1"
+    restart: always
+    volumes:
+      - influxdb-volume:/var/lib/influxdb2
+    networks:
+      - monitoring
+  grafana:
+    container_name: grafana
+    ports:
+      - "3001:3000"
+    image: "grafana/grafana:latest"
+    volumes:
+      - grafana-lib-volume:/var/lib/grafana
+      - grafana-ini-volume:/etc/grafana/
+    restart: always
+    init: true
+    networks:
+      - monitoring
+volumes:
+  influxdb-volume:
+  grafana-ini-volume:
+  grafana-lib-volume:
